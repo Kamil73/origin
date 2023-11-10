@@ -15,21 +15,16 @@ import os
 
 
 '''
-Make sure the required packages are installed: 
-Open the Terminal in PyCharm (bottom left). 
-
-On Windows type:
-python -m pip install -r requirements.txt
-
-On MacOS type:
-pip3 install -r requirements.txt
-
-This will install the packages from the requirements.txt for this project.
+web: gunicorn main:app #in Procfile. 
+This will tell our hosting provider to create a web worker that is able to receive HTTP requests.
+The Procfile also says to use gunicorn to serve your web app.
+And finally it specifies the Flask app object is the main.py file.
+That way the hosting provider knows about the entry point for the app and what our app is called.
 '''
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY_FLASK')
+app.config['SECRET_KEY'] = str(os.environ.get('SECRET_KEY_FLASK'))
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
@@ -54,7 +49,7 @@ gravatar = Gravatar(app,
                     base_url=None)
 
 # CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URI", "sqlite:///posts.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = str(os.environ.get("DB_URI", "sqlite:///posts.db"))
 db = SQLAlchemy()
 db.init_app(app)
 
